@@ -8,7 +8,12 @@ fill ~0 ~-1 ~0 ~0 ~-2 ~0 minecraft:dirt
 
 # fill area with air
 fill ~-10 ~0 ~-10 ~10 ~20 ~10 minecraft:air
+fill ~-50 ~0 ~-50 ~50 ~2 ~50 minecraft:air
+
+
 fill ~-3 ~0 ~-3 ~3 ~20 ~3 minecraft:air
+
+fill ~-75 ~-1 ~-75 ~75 ~-1 ~75 minecraft:stone
 
 
 # fill straight line: for TNT line

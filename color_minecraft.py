@@ -1,14 +1,20 @@
+#git push https://github.com/edensMind/minecraft_scripts.git master
+
 import xml.etree.ElementTree as ET
 import re
 
 #get XML file
-tree = ET.parse('test.xml')
+file = 'mushy.xml'
+tree = ET.parse(file)
 root = tree.getroot()
 
 # color dic
 color_block_dict = {
 	# black rgb(0, 0, 0)
 	"#000000":"black_wool",
+
+	# red rgb(255, 255, 255)
+	"#FFFFFF":"white_wool",
 
 	# brown rgb(127, 95, 31)
 	"#7F5F1F":"brown_wool",
@@ -80,14 +86,59 @@ for child in root:
 					rows.append(this_row)
 ########################################################################
 
+# start AHK script - call by pushing Control+R
+message = ";;; Making pixel art based off of: "+file+"\n;;; Output: art.ahk\n"
+ahk = message
+ahk += "^r::\n"
+
+# build will show up just south and east of player
+
 row_num = 1
 for row in rows:
 	print(row_num)
-	#if styles_dict[row[1]] != '':
-	for cell in row:
-		if styles_dict[cell[1]] != '':
-			print(cell)
+	#for each cell in a row...
+
+	i = 0
+	while i < len(row):
+		# get cell components
+		x_index = row[i][0]
+		next_x_index = 0
+		cell_style = row[i][1]
+
+		# check if style is not blank
+		if styles_dict[cell_style] != '':
+			#get block type - from dictionaries
+			block = color_block_dict[styles_dict[cell_style]]
+
+			while True:
+				if i+1 >= len(row):
+					break
+
+				if block == color_block_dict[styles_dict[row[i+1][1]]]:
+					print("debug")
+					next_x_index += 1
+					i += 1
+				else: 
+					
+					break
+
+			ahk += """
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Send, /
+Sleep 250
+Send, fill ~"""+str(x_index)+""" ~ ~"""+str(row_num)+""" ~"""+str(x_index+next_x_index)+""" ~ ~"""+str(row_num)+""" minecraft:"""+block+"""
+Send, {Enter}\n
+"""
+		i += 1
 	row_num += 1
 
+
+print(message)
 print()
 print(styles_dict)
+
+
+# write to circle.ahk
+f = open("art.ahk", "w")
+f.write(ahk)
+f.close()
