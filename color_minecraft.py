@@ -25,7 +25,7 @@ color_block_dict = {
 }
 
 ########################################################################
-# get Style tags - defines colors
+# get Style tags - defines colors 
 styles_dict = {}
 for child in root:
 	if child.tag == "{urn:schemas-microsoft-com:office:spreadsheet}Styles":
